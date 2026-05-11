@@ -1,0 +1,419 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+    <title>مساند | منصة الدعم التقني الداخلي المتكاملة</title>
+    
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    colors: {
+                        darkBg: '#1a2a1a',
+                        darkCard: '#1e3a2e',
+                        accent: '#c1272d',
+                        ministryGreen: '#006233',
+                        gold: '#c5a059',
+                        softBeige: '#fef9e6',
+                        redLight: '#fde6e6'
+                    },
+                    fontFamily: {
+                        sans: ['Almarai', 'Tajawal', 'sans-serif'],
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Almarai:wght@400;700;800&family=Tajawal:wght@400;700;900&display=swap');
+        body { 
+            font-family: 'Almarai', sans-serif; 
+            transition: all 0.3s ease; 
+            background-image: url('https://www.transparenttextures.com/patterns/arabesque.png');
+            background-color: #fef9e6;
+        }
+        .page-section { display: none; }
+        .active-section { display: block; animation: fadeIn 0.4s ease; border-top: 4px solid #c1272d; padding-top: 20px; }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+        
+        .sidebar-btn.active { background: rgba(193, 39, 45, 0.1); color: #c1272d; border-left: 4px solid #c1272d; }
+        .dark .sidebar-btn.active { background: rgba(193, 39, 45, 0.2); color: #ff6b6b; border-left: 4px solid #c1272d; }
+        
+        .tooltip { position: relative; }
+        .tooltip:hover::after {
+            content: attr(data-tip);
+            position: absolute; bottom: 125%; left: 50%; transform: translateX(-50%);
+            background: #333; color: #fff; padding: 5px 10px; border-radius: 6px;
+            font-size: 10px; white-space: nowrap; z-index: 50;
+        }
+        .mobile-menu-btn { display: none; }
+        @media (max-width: 1024px) { 
+            .mobile-menu-btn { display: block; } 
+            aside { position: fixed; right: -100%; transition: 0.3s; z-index: 40; } 
+            aside.open { right: 0; } 
+            .overlay { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.5); z-index: 35; } 
+            .overlay.open { display: block; } 
+        }
+        
+        .focus-visible:focus-visible { outline: 2px solid #c5a059; outline-offset: 2px; }
+        button, a, [role="button"], input, select, textarea { transition: all 0.2s; }
+        .high-contrast { filter: contrast(1.2); }
+        [aria-live="polite"] { position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden; clip: rect(0,0,0,0); border: 0; }
+        
+        .flag-bar {
+            background: linear-gradient(90deg, #c1272d 0%, #c1272d 33%, #006233 33%, #006233 66%, #c5a059 66%, #c5a059 100%);
+            height: 5px;
+            width: 100%;
+        }
+        .announcement-banner {
+            background: linear-gradient(135deg, #c1272d 0%, #006233 100%);
+            color: white;
+            border-radius: 16px;
+            padding: 12px;
+            text-align: center;
+            margin-bottom: 20px;
+            font-weight: bold;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+        }
+        .logo-shadow {
+            filter: drop-shadow(0 4px 6px rgba(0,0,0,0.2));
+        }
+        .official-full-header {
+            background: linear-gradient(145deg, #ffffff 0%, #fef5e6 100%);
+            border-bottom: 3px solid #c1272d;
+            padding: 1rem 1rem 0.5rem 1rem;
+            text-align: center;
+            margin-bottom: 0.5rem;
+        }
+        .official-full-header .logo-ar {
+            font-size: 1.4rem;
+            font-weight: 800;
+            color: #c1272d;
+        }
+        .official-full-header .logo-fr {
+            font-size: 0.8rem;
+            color: #006233;
+            letter-spacing: 0.5px;
+            font-weight: 500;
+        }
+        .official-full-header .ministry-name {
+            font-size: 1rem;
+            font-weight: 700;
+            color: #c1272d;
+            margin-top: 0.5rem;
+        }
+        .official-full-header .ministry-name-fr {
+            font-size: 0.7rem;
+            color: #4a5568;
+            margin-bottom: 0.25rem;
+        }
+        .official-full-header .secretariat {
+            font-size: 0.9rem;
+            font-weight: 700;
+            color: #006233;
+            margin-top: 0.3rem;
+        }
+        .official-full-header .secretariat-fr {
+            font-size: 0.65rem;
+            color: #4a5568;
+        }
+        .directorate-badge {
+            background: #f0f0f0;
+            display: inline-block;
+            padding: 0.3rem 1.2rem;
+            border-radius: 40px;
+            margin-top: 0.6rem;
+            font-weight: 800;
+            color: #c1272d;
+            border: 1px solid #c5a059;
+            font-size: 0.85rem;
+        }
+        @media (max-width: 640px) {
+            .official-full-header .logo-ar { font-size: 1.1rem; }
+            .official-full-header .logo-fr { font-size: 0.6rem; }
+            .official-full-header .ministry-name { font-size: 0.8rem; }
+            .official-full-header .ministry-name-fr { font-size: 0.55rem; }
+            .official-full-header .secretariat { font-size: 0.7rem; }
+            .directorate-badge { font-size: 0.7rem; padding: 0.2rem 0.8rem; }
+        }
+
+        #main-app {
+            height: 100vh;
+        }
+        main {
+            overflow-y: auto !important;
+            scrollbar-width: thin;
+            scrollbar-color: #c1272d #fef9e6;
+        }
+        main::-webkit-scrollbar {
+            width: 8px;
+        }
+        main::-webkit-scrollbar-thumb {
+            background-color: #c1272d;
+            border-radius: 20px;
+        }
+        main::-webkit-scrollbar-track {
+            background: #fef9e6;
+        }
+
+        @keyframes blinkRed {
+            0% { background-color: #c1272d; opacity: 1; }
+            50% { background-color: #ff6b6b; opacity: 0.7; }
+            100% { background-color: #c1272d; opacity: 1; }
+        }
+        .notification-blink {
+            animation: blinkRed 0.8s infinite;
+        }
+        .top-bar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 1rem;
+        }
+        .dark-mode-toggle {
+            background: rgba(193, 39, 45, 0.1);
+            border-radius: 2rem;
+            padding: 0.5rem 1rem;
+            cursor: pointer;
+            transition: all 0.2s;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-weight: bold;
+            border: 1px solid rgba(193, 39, 45, 0.3);
+        }
+        .dark-mode-toggle:hover {
+            background: rgba(193, 39, 45, 0.2);
+            transform: scale(1.02);
+        }
+        .step-circle {
+            display: inline-flex; align-items: center; justify-content: center; width: 28px; height: 28px; background: #c1272d; color: white; border-radius: 50%; font-size: 0.8rem; margin-left: 0.8rem;
+        }
+        .law-number { background: #cbd5e11a; padding: 0.2rem 0.6rem; border-radius: 20px; font-weight: bold; }
+        .card-bg { background: white; transition: 0.2s; }
+        .dark .card-bg { background: #1e293b; }
+        .reason-card { border-right: 5px solid #c5a059; transition: all 0.2s; }
+        .btn-microphone {
+            background: #c1272d20; border-radius: 2rem; padding: 0.5rem; cursor: pointer;
+        }
+    </style>
+</head>
+<body class="bg-softBeige dark:bg-darkBg text-slate-900 dark:text-slate-100 overflow-x-hidden">
+
+<div class="official-full-header">
+    <div class="logo-ar">المملكة المغربية</div>
+    <div class="logo-fr">ROYAUME DU MAROC</div>
+    <div class="ministry-name">وزارة التضامن والإدماج الاجتماعي والأسرة</div>
+    <div class="ministry-name-fr">MINISTÈRE DE LA SOLIDARITÉ, DE L’INSERTION SOCIALE ET DE LA FAMILLE</div>
+    <div class="secretariat">كتابة الدولة المكلفة بالإدماج الاجتماعي</div>
+    <div class="secretariat-fr">SECRÉTARIAT D’ÉTAT CHARGÉ DE L’INSERTION SOCIALE</div>
+    <div class="directorate-badge"><i class="fas fa-headset ml-1"></i> مساند – منصة الدعم التقني الداخلي المتكاملة</div>
+</div>
+<div class="flag-bar"></div>
+
+<!-- شاشة تسجيل الدخول -->
+<div id="login-screen" class="min-h-screen flex items-center justify-center p-4">
+    <div class="bg-white dark:bg-darkCard p-10 rounded-3xl shadow-2xl w-full max-w-md border-t-8 border-red-700">
+        <div class="text-center mb-8">
+            <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/2/2a/Coat_of_arms_of_Morocco.svg/120px-Coat_of_arms_of_Morocco.svg.png" alt="شعار المملكة" class="w-20 h-20 mx-auto mb-4 drop-shadow-md">
+            <h2 class="text-xl font-black text-red-700 dark:text-gold uppercase">مساند | الدعم التقني الداخلي</h2>
+            <p class="text-[10px] text-slate-500 mt-2">للموظفين العاملين بالمديرية فقط</p>
+        </div>
+        <div class="bg-amber-50 dark:bg-amber-900/30 p-4 rounded-2xl mb-6 text-right border-r-4 border-gold">
+            <i class="fas fa-headset text-gold ml-2"></i>
+            <span class="text-sm font-semibold">منصة متكاملة وفق الاستراتيجية الوطنية: إجراءات موحدة، مؤشرات أداء، توثيق آلي، وامتثال للقانون 09.08 و97.13.</span>
+        </div>
+        <div class="space-y-4">
+            <input id="l-user" type="text" placeholder="اسم المستخدم" class="w-full p-4 rounded-2xl bg-slate-50 dark:bg-slate-800 border border-red-200 outline-none focus:ring-2 focus:ring-gold text-right">
+            <input id="l-pass" type="password" placeholder="كلمة المرور" class="w-full p-4 rounded-2xl bg-slate-50 dark:bg-slate-800 border border-red-200 outline-none focus:ring-2 focus:ring-gold text-right">
+            <button onclick="login()" class="w-full bg-red-700 text-white font-bold py-4 rounded-2xl shadow-lg hover:bg-gold transition-all">دخول آمن للمنصة</button>
+        </div>
+        <p id="l-error" class="text-rose-500 text-xs text-center mt-4 hidden font-bold">بيانات الدخول غير صحيحة!</p>
+    </div>
+</div>
+
+<!-- الواجهة الرئيسية -->
+<div id="main-app" class="hidden flex h-screen overflow-hidden relative">
+    <div id="mobile-overlay" class="overlay" onclick="closeMobileMenu()"></div>
+    
+    <aside id="sidebar" class="w-72 bg-white dark:bg-darkCard border-l border-red-200 dark:border-red-800 flex flex-col shadow-2xl z-30 h-full overflow-y-auto">
+        <div class="p-6 text-center border-b border-red-200 dark:border-red-800 flex justify-between items-center lg:block">
+            <div class="flex items-center gap-3 lg:block">
+                <div class="bg-red-700 w-12 h-12 lg:w-16 lg:h-16 rounded-2xl flex items-center justify-center text-white text-2xl lg:text-3xl mx-auto mb-2 shadow-lg border-2 border-gold">
+                    <i class="fas fa-hand-holding-heart"></i>
+                </div>
+                <h1 class="font-black text-base lg:text-lg text-red-700 dark:text-gold">مساند</h1>
+                <p class="text-[10px]">دعم تقني شامل</p>
+            </div>
+            <button onclick="closeMobileMenu()" class="lg:hidden text-2xl text-gold"><i class="fas fa-times"></i></button>
+        </div>
+        <nav class="flex-1 px-4 py-6 space-y-2 text-right">
+            <button onclick="navigate('home', this)" class="sidebar-btn active w-full flex items-center gap-4 p-4 rounded-xl font-bold transition-all"><i class="fas fa-home w-5"></i> الرئيسية</button>
+            <button onclick="navigate('tickets', this)" class="sidebar-btn w-full flex items-center gap-4 p-4 rounded-xl font-bold transition-all relative"><i class="fas fa-envelope-open-text w-5"></i> الطلبات <span id="t-badge" class="bg-red-700 text-white text-[10px] px-2 py-0.5 rounded-full mr-auto">0</span></button>
+            <button onclick="navigate('strategy', this)" class="sidebar-btn w-full flex items-center gap-4 p-4 rounded-xl font-bold transition-all"><i class="fas fa-gavel w-5"></i> الاستراتيجية والإجراءات</button>
+            <button onclick="navigate('kb', this)" class="sidebar-btn w-full flex items-center gap-4 p-4 rounded-xl font-bold transition-all"><i class="fas fa-file-invoice w-5"></i> المعرفة التقنية</button>
+            <button onclick="navigate('stats', this)" class="sidebar-btn w-full flex items-center gap-4 p-4 rounded-xl font-bold transition-all"><i class="fas fa-chart-pie w-5"></i> الإحصائيات وKPIs</button>
+            <button id="nav-admin" onclick="navigate('admin', this)" class="sidebar-btn hidden w-full flex items-center gap-4 p-4 rounded-xl font-bold transition-all"><i class="fas fa-users-gear w-5"></i> إدارة المستخدمين</button>
+            <button id="nav-settings" onclick="navigate('settings', this)" class="sidebar-btn hidden w-full flex items-center gap-4 p-4 rounded-xl font-bold transition-all"><i class="fas fa-gears w-5"></i> الإعدادات</button>
+            <button onclick="logout()" class="w-full flex items-center gap-4 p-4 text-rose-500 font-bold mt-10 hover:bg-rose-50 dark:hover:bg-rose-900/20 rounded-xl transition-all"><i class="fas fa-right-from-bracket w-5"></i> خروج</button>
+        </nav>
+    </aside>
+
+    <main class="flex-1 overflow-y-auto p-4 md:p-8 text-right bg-softBeige dark:bg-darkBg">
+        <div class="top-bar">
+            <div id="notification-bar" class="flex-1 rounded-2xl shadow-md overflow-hidden">
+                <div class="flex items-center justify-between bg-white dark:bg-darkCard p-3 border-r-8 border-red-700">
+                    <div class="flex items-center gap-3"><i class="fas fa-bell text-gold text-xl"></i><span id="notification-text" class="font-bold text-sm">لا توجد طلبات جديدة</span></div>
+                    <div id="notification-badge" class="bg-red-700 text-white text-xs font-bold px-2 py-1 rounded-full hidden">0</div>
+                </div>
+            </div>
+            <div id="dark-mode-toggle" class="dark-mode-toggle cursor-pointer"><i id="dark-mode-icon" class="fas fa-sun"></i><span class="text-sm hidden sm:inline">الوضع</span></div>
+        </div>
+
+        <div class="announcement-banner"><i class="fas fa-calendar-alt ml-2"></i> مساند: منظومة متكاملة وفق الإطار القانوني (القانون 97.13، مرسوم 2.18.608) – خطة استمرارية أعمال BCP وتشفير AES-256.</div>
+
+        <!-- الصفحات -->
+        <div id="section-home" class="page-section active-section space-y-6">
+            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+                <div onclick="selectCategory('منصة إدماج')" class="bg-white dark:bg-darkCard p-6 rounded-3xl shadow-sm border-b-4 border-red-700 hover:-translate-y-2 transition cursor-pointer text-center"><div class="text-4xl text-red-700 mb-3"><i class="fas fa-building-columns"></i></div><h4 class="font-bold">منصة إدماج</h4></div>
+                <div onclick="selectCategory('الشبكة')" class="bg-white dark:bg-darkCard p-6 rounded-3xl shadow-sm border-b-4 border-gold hover:-translate-y-2 transition cursor-pointer text-center"><div class="text-4xl text-gold mb-3"><i class="fas fa-network-wired"></i></div><h4 class="font-bold">الشبكة والاتصالات</h4></div>
+                <div onclick="selectCategory('الأجهزة')" class="bg-white dark:bg-darkCard p-6 rounded-3xl shadow-sm border-b-4 border-green-700 hover:-translate-y-2 transition cursor-pointer text-center"><div class="text-4xl text-green-700 mb-3"><i class="fas fa-print"></i></div><h4 class="font-bold">الأجهزة والعتاد</h4></div>
+            </div>
+
+            <div class="bg-white dark:bg-darkCard p-6 md:p-8 rounded-3xl shadow-lg">
+                <h3 class="font-bold mb-4 text-red-700 dark:text-gold flex items-center gap-2"><i class="fas fa-microphone-alt"></i> تقديم طلب دعم (مع الإملاء الصوتي)</h3>
+                <div class="grid grid-cols-1 gap-4">
+                    <div class="flex gap-2 items-center"><textarea id="t-msg" rows="3" placeholder="صِف المشكلة التقنية بالتفصيل..." class="flex-1 p-4 rounded-xl bg-slate-50 dark:bg-slate-800 border border-red-200"></textarea><button onclick="startVoiceInput()" class="btn-microphone text-xl text-red-700"><i class="fas fa-microphone"></i></button></div>
+                    <select id="t-cat" class="p-4 rounded-xl bg-slate-50 dark:bg-slate-800 border border-red-200"><option value="منصة إدماج">منصة إدماج</option><option value="الشبكة">الشبكة</option><option value="الأجهزة">الأجهزة</option></select>
+                    <select id="t-priority" class="p-4 rounded-xl bg-slate-50 dark:bg-slate-800 border border-red-200"><option value="عادي">عادي</option><option value="عاجل">عاجل</option></select>
+                    <div><label class="text-sm font-bold">رفع ملفات (لقطات)</label><input type="file" id="t-files" multiple class="w-full p-2 rounded-xl bg-slate-50"></div>
+                    <button onclick="addTicket()" class="bg-red-700 text-white font-bold py-4 rounded-xl hover:bg-gold">إرسال الطلب</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- صفحة الطلبات -->
+        <div id="section-tickets" class="page-section space-y-6"><div id="tickets-grouped-container"></div></div>
+
+        <!-- صفحة الاستراتيجية والإجراءات (دمج المحتوى) -->
+        <div id="section-strategy" class="page-section space-y-8">
+            <div class="card-bg rounded-3xl p-6 shadow-xl"><h1 class="text-2xl font-black text-red-800">استراتيجية "مساند" – الإطار القانوني وآلية المعالجة</h1><p class="mt-2">منصة حوكمة إدارية وفق القوانين 97.13، 09.08، والمرسوم 2.18.608.</p></div>
+            <div class="grid md:grid-cols-2 gap-6">
+                <div class="card-bg p-5 reason-card rounded-2xl"><i class="fas fa-exclamation-triangle text-red-600"></i><h3 class="font-bold">الأسباب</h3><p>غياب آلية موحدة للإبلاغ، ضعف التنسيق، عدم توثيق الحلول، ومراعاة حقوق الموظفين ذوي الإعاقة.</p></div>
+                <div class="card-bg p-5 reason-card rounded-2xl"><i class="fas fa-chart-line text-gold"></i><h3 class="font-bold">مؤشرات الأداء (KPIs)</h3><p>زمن الاستجابة ≤4 ساعات، 85% حل خلال 24 ساعة، رضا ≥4.5/5.</p></div>
+            </div>
+            <div class="card-bg p-6 rounded-2xl"><h2 class="font-bold text-xl">آلية المعالجة (7 خطوات)</h2><div class="space-y-3 mt-3"> <div><span class="step-circle">1</span> استلام التذكرة وتصنيفها</div><div><span class="step-circle">2</span> التحليل والتشخيص</div><div><span class="step-circle">3</span> التكليف والتوزيع</div><div><span class="step-circle">4</span> التنفيذ والمعالجة</div><div><span class="step-circle">5</span> الرد والإغلاق المؤقت</div><div><span class="step-circle">6</span> تأكيد المستخدم</div><div><span class="step-circle">7</span> التقييم وتحسين العملية</div></div></div>
+            <div class="card-bg p-6 rounded-2xl"><h2 class="font-bold">مصفوفة RACI</h2><div class="overflow-x-auto"><table class="w-full text-sm"><thead class="bg-red-100"><tr><th>النشاط</th><th>مدير المديرية</th><th>رئيس الدعم</th><th>الموظف</th><th>فريق الدعم</th></tr></thead><tbody><tr><td>الموافقة</td><td>A/R</td><td>C</td><td>I</td><td>-</td></tr><tr><td>تقديم طلب</td><td>I</td><td>-</td><td>R</td><td>C</td></tr><tr><td>المعالجة</td><td>I</td><td>A</td><td>-</td><td>R</td></tr></tbody></table></div></div>
+            <div class="card-bg p-6 rounded-2xl"><i class="fas fa-shield-alt"></i> <strong>خطة استمرارية الأعمال BCP:</strong> قناة بديلة (helpdesk@handicap.gov.ma)، نسخ احتياطي يومي، فريق أزمات خلال ساعة.</div>
+            <div class="card-bg p-6 rounded-2xl"><i class="fas fa-lock"></i> <strong>الامتثال لقانون 09.08:</strong> تشفير AES-256، كلمات مرور قوية، التصريح لدى CNDP.</div>
+        </div>
+
+        <!-- صفحة المعرفة التقنية -->
+        <div id="section-kb" class="page-section space-y-6"><div id="files-container"></div></div>
+
+        <!-- صفحة الإحصائيات -->
+        <div id="section-stats" class="page-section space-y-6">
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-6"><div class="bg-white dark:bg-darkCard p-6 rounded-3xl text-center"><i class="fas fa-ticket-alt text-3xl text-red-700"></i><p class="text-3xl font-black" id="stat-total">0</p><p>إجمالي الطلبات</p></div><div class="bg-white dark:bg-darkCard p-6 rounded-3xl text-center"><i class="fas fa-spinner text-3xl text-gold"></i><p class="text-3xl font-black" id="stat-pending">0</p><p>قيد المعالجة</p></div><div class="bg-white dark:bg-darkCard p-6 rounded-3xl text-center"><i class="fas fa-check-circle text-3xl text-green-700"></i><p class="text-3xl font-black" id="stat-resolved">0</p><p>تم الحل</p></div></div>
+            <div class="bg-white dark:bg-darkCard p-6 rounded-3xl"><canvas id="stats-chart" height="200"></canvas></div>
+            <button onclick="exportStatsToPDF()" class="bg-red-700 text-white px-6 py-3 rounded-xl font-bold w-full">تصدير تقرير KPIs إلى PDF</button>
+        </div>
+
+        <!-- إدارة المستخدمين -->
+        <div id="section-admin" class="page-section space-y-8"><div class="bg-white dark:bg-darkCard p-6 rounded-3xl"><h3 class="font-bold">إضافة موظف</h3><div class="grid grid-cols-1 md:grid-cols-4 gap-4"><input id="admin-u" placeholder="اسم المستخدم" class="p-4 rounded-xl bg-slate-50"><input id="admin-p" type="password" placeholder="كلمة المرور" class="p-4 rounded-xl bg-slate-50"><select id="admin-r" class="p-4 rounded-xl"><option value="user">موظف</option><option value="admin">مسؤول تقني</option></select><button onclick="handleUserSubmit()" class="bg-gold text-white font-black rounded-xl py-4">إضافة</button></div><div id="users-list" class="grid grid-cols-1 md:grid-cols-3 gap-4 mt-6"></div></div></div>
+
+        <div id="section-settings" class="page-section"><div class="bg-white dark:bg-darkCard p-8 rounded-3xl"><button onclick="confirmReset()" class="w-full p-4 bg-rose-50 text-rose-600 font-bold rounded-2xl">إعادة ضبط المصنع</button></div></div>
+    </main>
+</div>
+
+<div aria-live="polite" id="speech-announcer"></div>
+
+<script>
+    let users = JSON.parse(localStorage.getItem('it_db_users_v7')) || [];
+    if (!users.some(u => u.u === 'admin')) users.push({ u: 'admin', p: '123', r: 'admin' });
+    let tickets = JSON.parse(localStorage.getItem('it_db_tickets_v7')) || [];
+    let session = null;
+    let statsChart = null;
+
+    function saveUsers() { localStorage.setItem('it_db_users_v7', JSON.stringify(users)); }
+    function saveTickets() { localStorage.setItem('it_db_tickets_v7', JSON.stringify(tickets)); }
+
+    function login() { let u = document.getElementById('l-user').value.trim(), p = document.getElementById('l-pass').value.trim(); let user = users.find(x => x.u === u && x.p === p); if(user) { session = user; startApp(); } else { document.getElementById('l-error').classList.remove('hidden'); } }
+    function logout() { session = null; document.getElementById('main-app').classList.add('hidden'); document.getElementById('login-screen').classList.remove('hidden'); }
+    function startApp() {
+        document.getElementById('login-screen').classList.add('hidden');
+        document.getElementById('main-app').classList.remove('hidden');
+        if(session.r === 'admin') { document.getElementById('nav-admin').classList.remove('hidden'); document.getElementById('nav-settings').classList.remove('hidden'); renderUserList(); }
+        renderTickets(); renderFiles(); updateStatistics();
+        navigate('home', document.querySelector('.sidebar-btn'));
+    }
+    function navigate(id, btn) {
+        document.querySelectorAll('.page-section').forEach(p => p.classList.remove('active-section'));
+        document.getElementById('section-'+id).classList.add('active-section');
+        document.querySelectorAll('.sidebar-btn').forEach(b => b.classList.remove('active'));
+        if(btn) btn.classList.add('active');
+        if(id === 'stats') updateStatistics();
+        closeMobileMenu();
+    }
+    function selectCategory(cat) { document.getElementById('t-cat').value = cat; document.getElementById('t-msg').focus(); }
+
+    window.startVoiceInput = function() {
+        let recognition = new (window.SpeechRecognition || window.webkitSpeechRecognition)();
+        recognition.lang = 'ar-SA';
+        recognition.onresult = (e) => { document.getElementById('t-msg').value = e.results[0][0].transcript; };
+        recognition.start();
+    };
+
+    window.addTicket = function() {
+        let msg = document.getElementById('t-msg').value.trim();
+        if(!msg) return;
+        let files = Array.from(document.getElementById('t-files').files).map(f=>f.name);
+        tickets.unshift({ id: Date.now(), user: session.u, msg, cat: document.getElementById('t-cat').value, priority: document.getElementById('t-priority').value, status: 'قيد المعالجة', reply: '', files, createdAt: new Date().toLocaleString('ar-EG') });
+        saveTickets();
+        document.getElementById('t-msg').value = ''; document.getElementById('t-files').value = '';
+        renderTickets(); updateStatistics();
+    };
+    window.editTicket = (id) => { let t = tickets.find(t=>t.id==id); if(t) { t.msg = prompt('تعديل الوصف', t.msg) || t.msg; saveTickets(); renderTickets(); } };
+    window.resolveTicket = (id) => { let t = tickets.find(t=>t.id==id); if(t) { t.status = 'تم الحل ✅'; saveTickets(); renderTickets(); updateStatistics(); } };
+    window.addReply = (id) => { let reply = prompt('الرد التقني'); if(reply) { let t = tickets.find(t=>t.id==id); if(t) { t.reply = reply; saveTickets(); renderTickets(); } } };
+
+    function renderTickets() {
+        let container = document.getElementById('tickets-grouped-container');
+        let viewable = session.r === 'admin' ? tickets : tickets.filter(t=>t.user === session.u);
+        if(!viewable.length) { container.innerHTML = '<div class="text-center p-10 bg-white dark:bg-darkCard rounded-3xl">لا توجد طلبات</div>'; return; }
+        let html = '';
+        ['منصة إدماج','الشبكة','الأجهزة'].forEach(cat => {
+            let filtered = viewable.filter(t=>t.cat===cat);
+            if(filtered.length) html += `<div class="mb-6 bg-white dark:bg-darkCard rounded-3xl shadow-sm"><div class="bg-red-700 text-white p-4 font-black">${cat}</div><div class="divide-y">`+filtered.map(t=>`<div class="p-4"><div><span class="font-bold text-red-700">@${t.user}</span> <span class="text-xs bg-slate-100 px-2 rounded-full">${t.priority}</span> <span class="text-[10px] text-slate-400">${t.createdAt||''}</span></div><p class="text-sm">${t.msg}</p>${t.files?.length?`<div class="text-xs text-gold">📎 ${t.files.join(', ')}</div>`:''}${t.reply?`<div class="bg-gold/10 p-2 rounded-xl text-sm">رد: ${t.reply}</div>`:''}<div class="flex justify-between mt-2"><span class="px-2 py-0.5 rounded-full text-[10px] ${t.status==='تم الحل ✅'?'bg-emerald-100 text-emerald-700':'bg-amber-100'}">${t.status}</span><div>${session.r==='admin'?`<button onclick="resolveTicket(${t.id})" class="text-xs bg-emerald-500 text-white px-2 py-1 rounded">حل</button> <button onclick="addReply(${t.id})" class="text-xs bg-gold text-white px-2 py-1 rounded">رد</button>`:''}<button onclick="editTicket(${t.id})" class="text-xs bg-blue-500 text-white px-2 py-1 rounded mr-1">تعديل</button></div></div></div>`).join('')+`</div></div>`;
+        });
+        container.innerHTML = html;
+        document.getElementById('t-badge').innerText = viewable.length;
+    }
+    function renderFiles() { document.getElementById('files-container').innerHTML = `<div class="bg-white dark:bg-darkCard p-6 rounded-3xl"><h4 class="font-bold">دليل الإجراءات التقنية</h4><p>وثائق الصيانة وقاعدة المعارف.</p><button onclick="alert('معروض قريباً')" class="bg-red-700 text-white p-3 rounded-xl">تحميل الدليل</button></div>`; }
+    function updateStatistics() {
+        let total = tickets.length, pending = tickets.filter(t=>t.status==='قيد المعالجة').length, resolved = tickets.filter(t=>t.status==='تم الحل ✅').length;
+        document.getElementById('stat-total').innerText = total; document.getElementById('stat-pending').innerText = pending; document.getElementById('stat-resolved').innerText = resolved;
+        if(statsChart) statsChart.destroy();
+        let catCount = {'منصة إدماج': tickets.filter(t=>t.cat==='منصة إدماج').length, 'الشبكة': tickets.filter(t=>t.cat==='الشبكة').length, 'الأجهزة': tickets.filter(t=>t.cat==='الأجهزة').length};
+        statsChart = new Chart(document.getElementById('stats-chart'), { type:'bar', data:{ labels:['منصة إدماج','الشبكة','الأجهزة'], datasets:[{ label:'الطلبات', data:[catCount['منصة إدماج'],catCount['الشبكة'],catCount['الأجهزة']], backgroundColor:['#c1272d','#c5a059','#006233'] }] } });
+    }
+    function renderUserList() { let container = document.getElementById('users-list'); container.innerHTML = users.map(u=>`<div class="bg-white dark:bg-slate-800 p-3 rounded-xl">@${u.u} - ${u.r==='admin'?'مسؤول':'موظف'}</div>`).join(''); }
+    window.handleUserSubmit = function() { let u = document.getElementById('admin-u').value.trim(), p = document.getElementById('admin-p').value.trim(), r = document.getElementById('admin-r').value; if(u && p && !users.some(x=>x.u===u)) { users.push({u,p,r}); saveUsers(); renderUserList(); alert('تمت الإضافة'); } else alert('خطأ'); };
+    window.confirmReset = function() { if(confirm('حذف كل البيانات؟')) { localStorage.clear(); location.reload(); } };
+    window.exportStatsToPDF = function() { html2pdf().from(document.getElementById('section-stats')).save(); };
+    function closeMobileMenu() { document.getElementById('sidebar').classList.remove('open'); document.getElementById('mobile-overlay').classList.remove('open'); }
+    function toggleDarkMode() { document.documentElement.classList.toggle('dark'); }
+    document.getElementById('dark-mode-toggle')?.addEventListener('click', toggleDarkMode);
+    // تحديث الإشعارات الوهمية
+    setInterval(() => { if(session && session.r==='admin' && tickets.some(t=>t.status==='قيد المعالجة')) { let cnt = tickets.filter(t=>t.status==='قيد المعالجة').length; document.getElementById('notification-text').innerHTML = `📢 ${cnt} طلب جديد`; document.getElementById('notification-badge').classList.remove('hidden'); } }, 5000);
+    window.addEventListener('load', () => { if(document.getElementById('search-tickets')) document.getElementById('search-tickets').addEventListener('input', renderTickets); });
+</script>
+</body>
+</html>
