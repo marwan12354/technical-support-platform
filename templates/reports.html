@@ -1,0 +1,27 @@
+
+{% extends "base.html" %}
+{% block title %}التقارير{% endblock %}
+{% block content %}
+<div class="grid grid-cols-1 lg:grid-cols-2 gap-6 animate-fade-in-up">
+    <div class="glass-card p-8 rounded-3xl shadow-xl border border-white/50">
+        <h3 class="font-extrabold text-xl mb-6 text-gray-800">توزيع المصروفات</h3>
+        <div class="h-64"><canvas id="pieChart"></canvas></div>
+    </div>
+    <div class="glass-card p-8 rounded-3xl shadow-xl border border-white/50">
+        <h3 class="font-extrabold text-xl mb-6 text-gray-800">المصروفات حسب الإدارة</h3>
+        <div class="h-64"><canvas id="barChart"></canvas></div>
+    </div>
+</div>
+<script>
+    new Chart(document.getElementById('pieChart'), {
+        type: 'doughnut',
+        data: { labels: ['مستلزمات', 'صيانة', 'خدمات', 'طباعة'], datasets: [{ data: [30000, 15000, 20000, 10000], backgroundColor: ['#ea580c', '#3b82f6', '#10b981', '#f59e0b'], borderWidth: 0 }] },
+        options: { cutout: '70%', plugins: { legend: { position: 'bottom' } } }
+    });
+    new Chart(document.getElementById('barChart'), {
+        type: 'bar',
+        data: { labels: ['المالية', 'الموارد', 'تقنية', 'مشتريات'], datasets: [{ label: 'المصروفات', data: [45000, 25000, 30000, 15000], backgroundColor: '#1e293b', borderRadius: 8 }] },
+        options: { plugins: { legend: { display: false } }, scales: { y: { beginAtZero: true, grid: { borderDash: [5, 5] } }, x: { grid: { display: false } } } }
+    });
+</script>
+{% endblock %}

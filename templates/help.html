@@ -1,0 +1,22 @@
+
+{% extends "base.html" %}
+{% block title %}دليل الاستخدام{% endblock %}
+{% block content %}
+<div class="glass-card p-8 rounded-3xl shadow-xl border border-white/50 max-w-3xl animate-fade-in-up">
+    <h3 class="font-extrabold text-2xl mb-6 text-gray-800">مرحباً بك في دليل الاستخدام</h3>
+    <div class="space-y-6">
+        <div class="flex gap-4">
+            <div class="w-10 h-10 rounded-full bg-brand text-white flex items-center justify-center font-bold shrink-0">1</div>
+            <div><h4 class="font-bold text-lg text-gray-800 mb-1">إضافة مصروف</h4><p class="text-gray-600">اذهب إلى "سجل المصروفات" واضغط على زر "مصروف جديد"، ثم املأ البيانات واضغط حفظ. ستسمع صوتاً تأكيدياً.</p></div>
+        </div>
+        <div class="flex gap-4">
+            <div class="w-10 h-10 rounded-full bg-brand text-white flex items-center justify-center font-bold shrink-0">2</div>
+            <div><h4 class="font-bold text-lg text-gray-800 mb-1">الاعتماد</h4><p class="text-gray-600">في قسم "الاعتماد والسداد" يمكنك مراجعة الطلبات المعلقة والموافقة عليها بضغطة زر.</p></div>
+        </div>
+        <div class="flex gap-4">
+            <div class="w-10 h-10 rounded-full bg-brand text-white flex items-center justify-center font-bold shrink-0">3</div>
+            <div><h4 class="font-bold text-lg text-gray-800 mb-1">التحكم بالصوت</h4><p class="text-gray-600">استخدم أيقونة مكبر الصوت في الأعلى لكتم أو تشغيل الأصوات في أي وقت.</p></div>
+        </div>
+    </div>
+</div>
+{% endblock %}

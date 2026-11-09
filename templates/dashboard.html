@@ -1,0 +1,83 @@
+
+{% extends "base.html" %}
+{% block title %}لوحة القيادة{% endblock %}
+{% block content %}
+<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8 animate-fade-in-up">
+    <!-- KPI 1 -->
+    <div class="glass-card rounded-3xl p-6 shadow-xl hover:-translate-y-2 transition duration-300 border-r-4 border-brand">
+        <div class="flex justify-between items-start mb-4">
+            <div class="w-12 h-12 rounded-2xl bg-orange-100 text-brand flex items-center justify-center text-2xl"><i class="fa-solid fa-user-clock"></i></div>
+            <span class="text-green-500 font-bold text-sm bg-green-50 px-2 py-1 rounded-lg">نشط</span>
+        </div>
+        <p class="text-gray-500 font-bold text-sm mb-1">بانتظار الاعتماد</p>
+        <h3 class="text-4xl font-extrabold text-gray-800">{{ stats.pending_approval }}</h3>
+    </div>
+    <!-- KPI 2 -->
+    <div class="glass-card rounded-3xl p-6 shadow-xl hover:-translate-y-2 transition duration-300 border-r-4 border-red-500">
+        <div class="flex justify-between items-start mb-4">
+            <div class="w-12 h-12 rounded-2xl bg-red-100 text-red-500 flex items-center justify-center text-2xl"><i class="fa-solid fa-calendar-xmark"></i></div>
+            <span class="text-red-500 font-bold text-sm bg-red-50 px-2 py-1 rounded-lg">تنبيه</span>
+        </div>
+        <p class="text-gray-500 font-bold text-sm mb-1">متأخرة في السداد</p>
+        <h3 class="text-4xl font-extrabold text-gray-800">{{ stats.overdue }}</h3>
+    </div>
+    <!-- KPI 3 -->
+    <div class="bg-gradient-to-br from-[#1e293b] to-[#0f172a] text-white rounded-3xl p-6 shadow-xl hover:-translate-y-2 transition duration-300 relative overflow-hidden">
+        <div class="absolute -left-10 -bottom-10 opacity-10 text-9xl"><i class="fa-solid fa-sack-dollar"></i></div>
+        <p class="text-gray-400 font-bold text-sm mb-1 relative z-10">المتبقي</p>
+        <h3 class="text-3xl font-extrabold text-white relative z-10">{{ "{:,.0f}".format(stats.total_remaining) }} <span class="text-sm text-gray-400">ر.س</span></h3>
+    </div>
+    <!-- KPI 4 -->
+    <div class="bg-gradient-to-br from-brand to-orange-600 text-white rounded-3xl p-6 shadow-xl hover:-translate-y-2 transition duration-300 relative overflow-hidden">
+        <div class="absolute -left-10 -bottom-10 opacity-10 text-9xl"><i class="fa-solid fa-hand-holding-dollar"></i></div>
+        <p class="text-orange-100 font-bold text-sm mb-1 relative z-10">المدفوع</p>
+        <h3 class="text-3xl font-extrabold text-white relative z-10">{{ "{:,.0f}".format(stats.total_paid) }} <span class="text-sm text-orange-200">ر.س</span></h3>
+    </div>
+</div>
+
+<div class="grid grid-cols-1 lg:grid-cols-3 gap-6 animate-fade-in-up animate-delay-2">
+    <div class="lg:col-span-2 glass-card p-8 rounded-3xl shadow-xl border border-white/50">
+        <div class="flex justify-between items-center mb-6">
+            <h3 class="font-extrabold text-xl text-gray-800"><i class="fa-solid fa-chart-line text-brand ml-2"></i> الأداء المالي</h3>
+        </div>
+        <div class="h-72"><canvas id="dashChart"></canvas></div>
+    </div>
+    
+    <div class="space-y-6">
+        <!-- بطاقة التحفيز الصوتي -->
+        <div class="bg-gradient-to-br from-purple-500 to-indigo-600 rounded-3xl p-6 text-white shadow-xl relative overflow-hidden cursor-pointer group" onclick="speak('أنت تبلي بلاءً حسناً! استمر في تنظيم مصروفاتك لتحقيق أهدافك المالية.')">
+            <i class="fa-solid fa-quote-right absolute -bottom-4 -left-4 text-8xl opacity-20 group-hover:scale-110 transition"></i>
+            <h3 class="font-bold text-lg mb-2 relative z-10">رسالة تحفيزية <i class="fa-solid fa-volume-high text-sm ml-1"></i></h3>
+            <p class="text-sm text-purple-100 font-semibold relative z-10">"التنظيم المالي هو الخطوة الأولى نحو الحرية المالية. أنت في الطريق الصحيح!"</p>
+            <p class="text-xs text-purple-200 mt-4 relative z-10">انقر للاستماع <i class="fa-solid fa-arrow-left"></i></p>
+        </div>
+
+        <div class="glass-card p-6 rounded-3xl shadow-xl border border-white/50">
+            <h3 class="font-extrabold text-lg text-gray-800 mb-4"><i class="fa-solid fa-clock-rotate-left text-brand ml-2"></i> أحدث العمليات</h3>
+            <div class="space-y-3">
+                {% for exp in expenses[:4] %}
+                <div class="flex justify-between items-center p-3 bg-white/60 rounded-xl border border-white hover:bg-white transition cursor-pointer">
+                    <div class="flex items-center gap-2">
+                        <div class="w-8 h-8 rounded-full bg-orange-50 flex items-center justify-center text-brand text-xs"><i class="fa-solid fa-receipt"></i></div>
+                        <div><p class="font-bold text-gray-800 text-xs">{{ exp.item }}</p><p class="text-[10px] text-gray-500">{{ exp.date }}</p></div>
+                    </div>
+                    <span class="font-extrabold text-gray-700 text-sm">{{ exp.amount }}</span>
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+</div>
+<script>
+    const ctx = document.getElementById('dashChart').getContext('2d');
+    let gradient = ctx.createLinearGradient(0, 0, 0, 400);
+    gradient.addColorStop(0, 'rgba(234, 88, 12, 0.4)');
+    gradient.addColorStop(1, 'rgba(234, 88, 12, 0.0)');
+    
+    new Chart(ctx, {
+        type: 'line',
+        data: { labels: ['مايو', 'يونيو', 'يوليو', 'أغسطس', 'سبتمبر', 'أكتوبر'], datasets: [{ label: 'المصروفات', data: [12000, 19000, 15000, 22000, 18000, 24800], borderColor: '#ea580c', backgroundColor: gradient, borderWidth: 3, fill: true, tension: 0.4, pointBackgroundColor: '#fff', pointBorderColor: '#ea580c', pointBorderWidth: 2, pointRadius: 4 }] },
+        options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { display: false } }, scales: { y: { beginAtZero: true, grid: { borderDash: [5, 5] } }, x: { grid: { display: false } } } }
+    });
+</script>
+{% endblock %}

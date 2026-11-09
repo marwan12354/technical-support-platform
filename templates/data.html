@@ -1,0 +1,31 @@
+
+{% extends "base.html" %}
+{% block title %}إدارة البيانات{% endblock %}
+{% block content %}
+<div class="grid grid-cols-1 md:grid-cols-2 gap-6 animate-fade-in-up">
+    <div class="glass-card rounded-3xl shadow-xl p-8 border border-white/50">
+        <h3 class="font-extrabold text-xl mb-6 text-gray-800"><i class="fa-solid fa-sitemap text-brand ml-2"></i> الهيكل التنظيمي</h3>
+        <div class="space-y-3">
+            {% for dept in departments %}
+            <div class="flex justify-between items-center bg-white p-4 rounded-xl border border-gray-100">
+                <span class="font-bold text-gray-700">{{ dept.name }}</span>
+                <span class="badge badge-green">نشط</span>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+    <div class="glass-card rounded-3xl shadow-xl p-8 border border-white/50">
+        <h3 class="font-extrabold text-xl mb-6 text-gray-800"><i class="fa-solid fa-users text-brand ml-2"></i> المستخدمين</h3>
+        <div class="space-y-3">
+            <div class="flex justify-between items-center bg-white p-4 rounded-xl border border-gray-100">
+                <div class="flex items-center gap-3"><div class="w-8 h-8 rounded-full bg-brand text-white flex items-center justify-center font-bold">م</div><span class="font-bold">مدير النظام</span></div>
+                <span class="text-xs font-bold text-gray-400">صلاحيات كاملة</span>
+            </div>
+            <div class="flex justify-between items-center bg-white p-4 rounded-xl border border-gray-100">
+                <div class="flex items-center gap-3"><div class="w-8 h-8 rounded-full bg-blue-500 text-white flex items-center justify-center font-bold">أ</div><span class="font-bold">أحمد (محاسب)</span></div>
+                <span class="text-xs font-bold text-gray-400">إدخال بيانات</span>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
