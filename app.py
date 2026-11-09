@@ -7,11 +7,19 @@ from database import init_database
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 
 app = Flask(__name__)
-app.config['SECRET_KEY'] = 'secret-key-here'
-app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///' + os.path.join(BASE_DIR, 'expenses.db')
+app.config['SECRET_KEY'] = 'super-secret-key-here'
+# استخدام متغير البيئة DATABASE_URL إذا وجد (للاستضافة)، وإلا استخدام SQLite المحلي
+db_path = os.environ.get('DATABASE_URL', 'sqlite:///' + os.path.join(BASE_DIR, 'expenses.db'))
+if db_path.startswith("postgres://"):
+    db_path = db_path.replace("postgres://", "postgresql://", 1)
+app.config['SQLALCHEMY_DATABASE_URI'] = db_path
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 
 db.init_app(app)
+
+# [هام جداً] تهيئة قاعدة البيانات هنا لتعمل مع Gunicorn على Render
+with app.app_context():
+    init_database(app)
 
 @app.context_processor
 def inject_globals():
@@ -106,6 +114,4 @@ def approve(id):
     return redirect(url_for('approvals_page'))
 
 if __name__ == '__main__':
-    init_database(app)
-    print("🚀 المنصة تعمل الآن على: http://127.0.0.1:5000")
     app.run(debug=True, use_reloader=False, port=5000)
